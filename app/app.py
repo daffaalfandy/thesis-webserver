@@ -32,6 +32,7 @@ def eratosthenes(n):
                 all.append(i * j)
                 j += 1
         i += 2
+    return all
 
 app = Flask(__name__)
 conn = None
@@ -49,13 +50,14 @@ def home():
     
     conn.insert_ip_addr(ip_addr, random_str)
     
-    eratosthenes(100)
+    prime_number = eratosthenes(100)
 
     data = {
         "client_ipaddr": ip_addr,
-        "random_str": random_str,
         "served_by": hostname,
-        "server_ipaddr": server_ipaddr
+        "server_ipaddr": server_ipaddr,
+        "random_str": random_str,
+        "prime_number": prime_number
     }
 
     response = app.response_class(
