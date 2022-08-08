@@ -1,6 +1,7 @@
 import socket
 import random
 import string
+import json
 from flask import Flask, request
 import mysql.connector
 
@@ -49,10 +50,19 @@ def home():
     conn.insert_ip_addr(ip_addr, random_str)
     
     eratosthenes(100)
-    
-    response = '<h1> Client with IP Address: {} </h1>'.format(ip_addr)
-    response += '</br> <h1> Have a random string: {} </h1>'.format(random_str)
-    response += '</br> <strong> <h2> Served by Server {} with IP Addreess: {} </h2> </strong>'.format(hostname, server_ipaddr)
+
+    data = {
+        "client_ipaddr": ip_addr,
+        "random_str": random_str,
+        "served_by": hostname,
+        "server_ipaddr": server_ipaddr
+    }
+
+    response = app.response_class(
+        response = json.dumps(data),
+        status = 200,
+        mimetype = 'application/json'
+    )
     
     return response
 
