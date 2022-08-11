@@ -20,19 +20,20 @@ class DBManager:
         self.connection.commit()
     
 
-def eratosthenes(n):
-    all = []
-    prime = 1
-    i = 3
-    while (i <= n):
-        if  i not in all:
-            prime += 1
-            j = i
-            while (j <= (n / i)):
-                all.append(i * j)
-                j += 1
-        i += 2
-    return all
+def eratosthenes(num):
+    prime_number = []
+    prime = [True for i in range(num+1)]
+    p = 2
+    while (p * p <= num):
+        if (prime[p] == True):
+            for i in range(p * p, num+1, p):
+                prime[i] = False
+        p += 1
+
+    for p in range(2, num+1):
+        if prime[p]:
+            prime_number.append(p)
+    return prime_number
 
 app = Flask(__name__)
 conn = None
@@ -50,7 +51,7 @@ def home():
     
     conn.insert_ip_addr(ip_addr, random_str)
     
-    prime_number = eratosthenes(100)
+    prime_number = eratosthenes(1000)
 
     data = {
         "client_ipaddr": ip_addr,
@@ -67,6 +68,3 @@ def home():
     )
     
     return response
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')
